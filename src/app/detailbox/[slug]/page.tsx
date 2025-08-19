@@ -1,4 +1,4 @@
-import { IBox } from 'app/types/backend';
+import { IBox } from '../../types/backend';
 import BoxDetail from './app.detailbox';
 
 

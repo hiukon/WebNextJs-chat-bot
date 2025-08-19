@@ -1,5 +1,5 @@
 'use client';
-import { IBox } from 'app/types/backend';
+import { IBox } from '../../types/backend';
 import Image from 'next/image';
 import { useState } from 'react';
 interface Props {

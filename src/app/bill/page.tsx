@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { ICartItem } from 'app/types/backend';
+import { ICartItem } from '../types/backend';
 
 
 const Checkout = () => {

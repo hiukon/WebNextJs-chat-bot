@@ -5,7 +5,7 @@ import 'swiper/css/pagination';
 import { IFood } from '../types/backend';
 import SwiperBanner from './app.banner';
 import Dish from './app.dish';
-import ChatWindow from 'app/chatbot/ChatWindow';
+
 
 interface IProps {
     food: IFood[];
