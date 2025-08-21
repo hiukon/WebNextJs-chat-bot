@@ -1,4 +1,4 @@
-import { IFood } from 'app/types/backend';
+import { IFood } from '../../types/backend';
 import Detail from './app.detail';
 
 
