@@ -6,22 +6,11 @@
     position: relative;
 }
 
-/* Ensure CSS Modules exports these tokens used by components */
-.open {}
-
-.bot-message {}
-
-.thinking {}
-
-.fileUploaded {}
-
-/* Local reset within chatbot only (avoid global impact) */
 .wrapper * {
     box-sizing: border-box;
     font-family: "Inter", sans-serif;
 }
 
-/* Toggler */
 .toggler {
     position: fixed;
     bottom: 30px;
@@ -34,20 +23,39 @@
     justify-content: center;
     cursor: pointer;
     border-radius: 50%;
-    background: #5350C4;
+    background: #006F3C;
     transition: all 0.2s ease;
+    z-index: 9999;
 }
 
-/* Compatibility: also support global id selector if used (scoped under wrapper for CSS Modules purity) */
-
+.wrapper :global(#chatbot-toggler) {
+    position: fixed;
+    bottom: 30px;
+    right: 35px;
+    border: none;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    background: #006F3C;
+    transition: all 0.2s ease;
+    z-index: 9999;
+}
 
 .toggler span {
     color: #fff;
     position: absolute;
-    transition: opacity .18s ease, transform .18s ease;
+    transition: opacity 0.18s ease, transform 0.18s ease;
 }
 
-
+.wrapper :global(#chatbot-toggler) span {
+    color: #fff;
+    position: absolute;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
 
 .toggler span:first-child {
     opacity: 1;
@@ -73,12 +81,10 @@
     transform: rotate(0deg);
 }
 
-/* Hide comment icon when closed for id usage as well */
 .wrapper :global(#chatbot-toggler) span:last-child {
     opacity: 0;
 }
 
-/* Ensure id-based toggler mirrors open state */
 .open :global(#chatbot-toggler) {
     transform: rotate(90deg);
 }
@@ -93,12 +99,11 @@
     transform: rotate(0deg);
 }
 
-/* Popup */
 .chatbot-popup {
     position: fixed;
     right: 35px;
     bottom: 90px;
-    width: 420px;
+    width: 320px;
     background: #fff;
     overflow: hidden;
     border-radius: 15px;
@@ -117,11 +122,10 @@
     transform: scale(1);
 }
 
-/* Header */
 .chat-header {
     display: flex;
     align-items: center;
-    background: #5350C4;
+    background: #006F3C;
     padding: 15px 22px;
     justify-content: space-between;
 }
@@ -136,7 +140,7 @@
     height: 35px;
     width: 35px;
     padding: 6px;
-    fill: #5350C4;
+    fill: #006F3C;
     background: #fff;
     border-radius: 50%;
     flex-shrink: 0;
@@ -166,12 +170,11 @@
     background: #7572cb;
 }
 
-/* Body */
 .chat-body {
     padding: 25px 22px;
     display: flex;
     gap: 20px;
-    height: 460px;
+    height: 360px;
     margin-bottom: 82px;
     overflow-y: auto;
     flex-direction: column;
@@ -179,14 +182,14 @@
     scrollbar-color: #ccccf5 transparent;
 }
 
-/* open state controlled by wrapper */
+
 .open .chatbot-popup {
     opacity: 1;
     pointer-events: auto;
     transform: scale(1);
 }
 
-/* message */
+
 .message {
     display: flex;
     gap: 11px;
@@ -199,7 +202,7 @@
     width: 35px;
     padding: 6px;
     fill: #fff;
-    background: #5350C4;
+    background: #006F3C;
     border-radius: 50%;
     flex-shrink: 0;
     margin-bottom: 2px;
@@ -211,28 +214,28 @@
     align-items: flex-end;
 }
 
-/* message text: preserve newline, avoid breaking each char */
 .message-text {
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-    word-break: normal;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
     hyphens: auto;
     padding: 12px 16px;
-    max-width: 75%;
+    max-width: 100%;
     font-size: 0.95rem;
     background: #F2F2FF;
     border-radius: 13px;
     line-height: 1.35;
+
 }
 
-/* thinking small padding */
+
 .bot-message.thinking .message-text {
     padding: 2px 16px;
 }
 
 .user-message .message-text {
     color: #fff;
-    background: #5350C4;
+    background: #006F3C;
     border-radius: 13px 3px 13px 13px;
 }
 
@@ -266,15 +269,15 @@
 }
 
 .thinking-indicator .dot:nth-child(1) {
-    animation-delay: .2s;
+    animation-delay: 0.2s;
 }
 
 .thinking-indicator .dot:nth-child(2) {
-    animation-delay: .3s;
+    animation-delay: 0.3s;
 }
 
 .thinking-indicator .dot:nth-child(3) {
-    animation-delay: .4s;
+    animation-delay: 0.4s;
 }
 
 @keyframes dotPulse {
@@ -285,12 +288,12 @@
     }
 
     28% {
-        opacity: .4;
+        opacity: 0.4;
         transform: translateY(-4px);
     }
 
     44% {
-        opacity: .2;
+        opacity: 0.2;
     }
 }
 
@@ -339,7 +342,6 @@
     scrollbar-color: #ccccf5 transparent;
 }
 
-/* controls */
 .chat-controls {
     display: flex;
     height: 47px;
@@ -374,7 +376,6 @@
     display: block;
 }
 
-/* Animated dots inside send button while sending */
 .sending {
     display: flex !important;
     align-items: center;
@@ -393,15 +394,15 @@
 }
 
 .button-dots .dot:nth-child(1) {
-    animation-delay: .1s;
+    animation-delay: 0.1s;
 }
 
 .button-dots .dot:nth-child(2) {
-    animation-delay: .2s;
+    animation-delay: 02s;
 }
 
 .button-dots .dot:nth-child(3) {
-    animation-delay: .3s;
+    animation-delay: 0.3s;
 }
 
 #send-message:hover {
@@ -412,7 +413,7 @@
     background: #F2F2FF;
 }
 
-/* Minimal user input style improve */
+
 .message-input::placeholder {
     color: #b7b7da;
 }
@@ -421,41 +422,39 @@
     line-height: 1.35;
 }
 
-/* upload */
+
 .file-upload-wrapper {
     height: 35px;
     width: 35px;
     position: relative;
 }
 
-.file-upload-wrapper :where(img, button) {
+.fileUploaded img {
+    display: block;
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+    border-radius: 50%;
     position: absolute;
 }
 
-.file-upload-wrapper img {
-    display: none;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-}
-
-.file-cancel {
+.fileUploaded:hover .file-cancel {
+    display: block;
     color: #ff0000;
     background: #fff;
+    position: absolute;
+
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    box-shadow: 0 0 2px #888;
 }
 
-.file-upload-wrapper :where(img, .file-cancel),
-.file-upload-wrapper.fileUploaded .file-upload {
+.fileUploaded .file-upload {
     display: none;
 }
 
-.file-upload-wrapper.fileUploaded img,
-.file-upload-wrapper.fileUploaded:hover #file-cancel {
-    display: block;
-}
-
-/* helpers */
 .preview {
     border-radius: 8px;
     max-height: 120px;
@@ -475,7 +474,6 @@
     background: rgba(255, 255, 255, 0.3);
 }
 
-/* Collapsed notice */
 .collapsed-notice {
     padding: 14px 18px;
     text-align: center;
@@ -497,7 +495,6 @@
     word-break: normal;
     hyphens: auto;
 }
-
 
 .message-text.force-break-safe {
     overflow-wrap: break-word;

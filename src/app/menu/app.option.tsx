@@ -1,8 +1,9 @@
 'use client';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, Children, } from 'react';
 import { ConfigProvider, Menu } from 'antd';
-import { AppstoreOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, IeSquareFilled } from '@ant-design/icons';
 import { IFood } from '../types/backend';
+import Image from 'next/image';
 
 interface IProps {
     foods: IFood[];
@@ -48,7 +49,6 @@ const AntdMenu = ({ foods, onCategoryChange }: IProps) => {
                     label: 'Phân loại',
                     children: categories,
                 },
-                { key: '4', label: 'Hình ảnh Menu' },
             ],
         },
     ];
@@ -67,9 +67,9 @@ const AntdMenu = ({ foods, onCategoryChange }: IProps) => {
                 openKeys={openKeys}
                 onOpenChange={setOpenKeys}
                 style={{
-                    width: 256,
+                    width: 200,
                     paddingBottom: 30,
-                    marginLeft: 300,
+                    marginLeft: 150,
                     marginTop: 80,
                     border: '1px solid rgb(235, 235, 235)',
                     borderRadius: 8,

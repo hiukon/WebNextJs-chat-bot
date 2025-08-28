@@ -18,13 +18,14 @@ export function useChat(storageKey = "chat_history_v1") {
         {
             id: uid(),
             role: "model",
-            text: "Xin chào\nTôi có thể giúp gì cho bạn ?",
+            text: "Xin chào\nGian hàng có thể giúp gì cho bạn ?",
             createdAt: new Date().toISOString(),
         },
     ]);
     const [thinking, setThinking] = useState(false);
     const chatHistoryRef = useRef<any[]>([]);
     const loadingRef = useRef(false);
+
 
     useEffect(() => {
         try {
@@ -47,6 +48,8 @@ export function useChat(storageKey = "chat_history_v1") {
             createdAt: new Date().toISOString(),
             image: imageBase64 ? `data:${mime};base64,${imageBase64}` : undefined,
         };
+
+
         setMessages((s) => [...s, m]);
 
         const parts: any[] = [{ text }];
@@ -68,7 +71,9 @@ export function useChat(storageKey = "chat_history_v1") {
                 throw new Error(txt || "Network error");
             }
             const data = await res.json();
-            const replyText = data.reply ?? "Mình không hiểu, thử lại nhé.";
+            const replyText = (data.reply ?? "Mình không hiểu, thử lại nhé.")
+                .replace(/\*\*(.*?)\*\*/g, "$1")
+                .trim();
 
             setMessages((s) => {
                 const copy = [...s];
@@ -87,11 +92,6 @@ export function useChat(storageKey = "chat_history_v1") {
         }
     };
 
-    const clear = () => {
-        setMessages([]);
-        chatHistoryRef.current = [];
-        try { localStorage.removeItem(storageKey); } catch (e) { }
-    };
 
-    return { messages, addUserMessage, clear, thinking, setMessages };
+    return { messages, addUserMessage, thinking, setMessages };
 }

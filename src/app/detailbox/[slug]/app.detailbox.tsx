@@ -75,7 +75,26 @@ const BoxDetail = ({ box }: Props) => {
                 </div>
                 <div className="flex items-center justify-between mt-6">
 
-                    <button className="bg-green-700 text-white px-6 py-2 rounded-xl shadow-md">
+                    <button
+                        onClick={() => {
+                            const item = {
+                                id: box._id,
+                                name: box.name,
+                                image: box.image,
+                                price: box.price,
+                                quantity,
+                                size: size[selectedSizeIndex].name,
+                                sizePrice: size[selectedSizeIndex].price,
+                                total: totalPrice,
+                                toppings: [],
+
+
+                            };
+                            localStorage.setItem("cart", JSON.stringify(item));
+                            window.location.href = "/bill";
+                        }}
+                        className="bg-green-700 text-white px-6 py-2 rounded-xl shadow-md"
+                    >
                         🛒 Thêm vào giỏ hàng: {totalPrice.toLocaleString()} ₫
                     </button>
                 </div>

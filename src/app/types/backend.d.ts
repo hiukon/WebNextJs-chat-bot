@@ -10,7 +10,7 @@ export interface IFood {
     updatedAt?: string;
 }
 export interface IBox {
-    id: string;
+    _id?: string;
     name: string;
     image: string;
     price: number;

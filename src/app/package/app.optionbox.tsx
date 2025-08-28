@@ -47,7 +47,6 @@ const AntdMenuBox = ({ boxes, onCategoryChange }: IProps) => {
                     label: 'Phân loại',
                     children: categories,
                 },
-                { key: '4', label: 'Hình ảnh Menu' },
             ],
         },
     ];
