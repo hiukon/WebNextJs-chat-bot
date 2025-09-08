@@ -6,12 +6,16 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import { EyeOutlined } from '@ant-design/icons';
 import Link from 'next/link';
+import ModelF from '../detail/[slug]/modelf';
+
+
 interface IProps {
     food: IFood[];
 }
 const Dish = ({ food }: IProps) => {
     const [visibleCount, setVisibleCount] = useState(5);
     const [visibleCount1, setVisibleCount1] = useState(5);
+    const [isOpen, setIsOpen] = useState(false);
 
     const drinkFoods = food.filter((f) => f.category === "Đồ uống");
     const visibledrinkFoods = drinkFoods.slice(0, visibleCount);
@@ -24,7 +28,6 @@ const Dish = ({ food }: IProps) => {
     const handleShowMore1 = () => {
         setVisibleCount1((prev1) => prev1 + 5);
     };
-
     return (
         <>
 
@@ -53,10 +56,7 @@ const Dish = ({ food }: IProps) => {
                             <p>{f.name}</p>
                             <p className=' font-semibold'> {Number(f.price).toLocaleString()}đ</p>
                         </Link>
-                        <button className="p-1 bg-green-700 font-semibold text-white w-[90%] h-[40px] border rounded-lg flex items-center justify-center mb-3 ">
-                            <p>Đặt mua</p>
-
-                        </button>
+                        <ModelF food={f} isOpen={isOpen} onClose={() => setIsOpen(false)} />
 
                     </div>
 
@@ -99,7 +99,6 @@ const Dish = ({ food }: IProps) => {
                         </Link>
                         <button className="p- bg-green-700 font-semibold text-white w-[90%] h-[40px] border rounded-lg flex items-center justify-center ">
                             <p>Đặt mua</p>
-
                         </button>
 
                     </div>

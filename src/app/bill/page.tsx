@@ -2,13 +2,14 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { ICartItem } from '../types/backend';
-
+import { useCartStore } from './cartStore';
 
 const Checkout = () => {
     const [cart, setCart] = useState<ICartItem | null>(null);
     const [payment, setPayment] = useState<string>('card');
     const [mode, setMode] = useState<'delivery' | 'pickup'>('delivery');
     const [agreed, setAgreed] = useState(false);
+    const { items, removeItem } = useCartStore();
 
     useEffect(() => {
         const data = localStorage.getItem("cart");
@@ -60,7 +61,7 @@ const Checkout = () => {
             alert('Gửi đơn hàng thất bại!');
         }
     };
-
+    const totalPrice = items.reduce((sum, item) => sum + item.total, 0);
 
     return (
         <div className="flex flex-col md:flex-row p-6 justify-center mt-8">
@@ -132,13 +133,30 @@ const Checkout = () => {
             </div>
             <div className="w-full md:w-1/3 h-[700px] pr-4 space-y-6 border border-black rounded-lg p-4 m-3">
                 <h3 className="text-lg font-bold text-green-700 border-b-2 border-gray-300 mt-3">🛒 Giỏ hàng của bạn</h3>
-                <div className="flex items-center  space-x-4 ">
-                    <Image src={cart.image} alt={cart.name} width={80} height={80} />
-                    <div className=''>
-                        <p>{cart.name} (Size {cart.size})</p>
-                        <p className="text-sm text-gray-500">{toppingText}</p>
-                        <p className="font-semibold">{cart.total.toLocaleString()} ₫</p>
-                    </div>
+                <div className="flex items-center space-x-4 ">
+                    {items.length === 0 ? (
+                        <p>Giỏ hàng trống</p>
+                    ) : (
+                        <div>
+                            {items.map((item, idx) => (
+                                <div key={idx} className="flex items-center space-x-4 " >
+                                    <Image src={item.image} alt={item.name} width={80} height={80} />
+                                    <div className=''>
+                                        <p>{item.name} (Size {item.size})</p>
+                                        <p className="text-sm text-gray-500">{toppingText}</p>
+                                        <p className="font-semibold">{item.total.toLocaleString()} ₫</p>
+                                    </div>
+                                    <button id="close-chatbot" className="material-symbols-rounded text-red-500 mr-auto" onClick={() => removeItem(item.id!)} >
+                                        delete
+                                    </button>
+                                </div>
+
+                            ))}
+
+                        </div>
+
+                    )}
+
                 </div>
                 <div className="mt-6">
                     <h4 className="font-semibold text-green-700 ">Thông tin thanh toán</h4>

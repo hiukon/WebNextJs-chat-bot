@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import SweetIceSelector from './app.sugar';
 import { IFood } from '../../types/backend';
-
+import { useCartStore } from '../../bill/cartStore';
 const size = [
     { name: 'XL', price: 10000 },
     { name: 'L', price: 5000 },
@@ -38,12 +38,11 @@ const Detail = ({ food }: { food: IFood }) => {
     );
     const selectedSizePrice = size[selectedSizeIndex].price;
 
-
-
     const basePrice = Number(food.price);
 
     const totalPrice = (basePrice + selectedSizePrice) * quantity + totalTopping;
 
+    const addItem = useCartStore((state) => state.addItem);
     return (
         <div className="flex justify-center w-full p-6 mt-[50px]">
             <div className="bg-gray-100 p-4 rounded-xl w-[450px] h-[500px] flex items-center justify-center shadow-sm">
@@ -148,8 +147,8 @@ const Detail = ({ food }: { food: IFood }) => {
                                     .filter(t => t.count > 0),
                                 total: totalPrice,
                             };
-                            localStorage.setItem("cart", JSON.stringify(item));
-                            window.location.href = "/bill";
+                            addItem(item);
+
                         }}
                         className="bg-green-700 text-white px-6 py-2 rounded-xl shadow-md"
                     >

@@ -2,6 +2,7 @@
 import { IBox } from '../../types/backend';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useCartStore } from '../../bill/cartStore';
 interface Props {
     box: IBox;
 }
@@ -22,6 +23,7 @@ const BoxDetail = ({ box }: Props) => {
     const basePrice = Number(box.price);
 
     const totalPrice = (basePrice + selectedSizePrice) * quantity;
+    const addItem = useCartStore((state) => state.addItem);
 
     return (
         <div className="flex justify-center w-full p-6 mt-[50px]">
@@ -87,11 +89,8 @@ const BoxDetail = ({ box }: Props) => {
                                 sizePrice: size[selectedSizeIndex].price,
                                 total: totalPrice,
                                 toppings: [],
-
-
                             };
-                            localStorage.setItem("cart", JSON.stringify(item));
-                            window.location.href = "/bill";
+                            addItem(item);
                         }}
                         className="bg-green-700 text-white px-6 py-2 rounded-xl shadow-md"
                     >
