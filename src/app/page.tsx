@@ -1,5 +1,4 @@
 
-
 import ChatWindow from './ai/ChatWindow';
 import Header from './header/app.header';
 import HomePage from './home/page';
@@ -28,6 +27,7 @@ export default async function Page() {
         <div className="w-[77%] max-w-screen-2xl mx-auto mt-4">Lỗi khi tải dữ liệu</div>
       )}
       {Array.isArray(foods) && foods.length > 0 && <HomePage food={foods} />}
+
     </div>
   );
 }

@@ -25,6 +25,7 @@ export async function POST(request: Request) {
         const menuText = foods
             .map((f) => `${f.name} - ${f.price}`)
             .join("\n");
+
         const boxes = await Box.find().lean();
         const boxText = boxes
             .map((b) => `${b.name} - ${b.price}`)
@@ -38,9 +39,8 @@ export async function POST(request: Request) {
                 parts: [
                     {
                         text:
-                            "Hãy đóng vai một trợ lý khách hàng của cửa hàng bán đồ ăn và nước uống.\n" +
+                            "Hãy đóng vai một trợ lý ảo hỗ khách hàng của cửa hàng TTH Shop bán đồ ăn và nước uống.\n" +
                             "Luôn trả lời ngắn gọn, lịch sự, chỉ nói về menu, món ăn, nước uống, khuyến mãi và đặt hàng.\n" +
-                            "Không được nói rằng bạn là AI hoặc chương trình máy tính.\n\n" +
                             "Đây là menu cửa hàng:\n" +
                             menuText + "\n" + boxText
                     },

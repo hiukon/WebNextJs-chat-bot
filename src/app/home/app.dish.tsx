@@ -97,9 +97,7 @@ const Dish = ({ food }: IProps) => {
                             <p>{u.name}</p>
                             <p className=' font-semibold'> {Number(u.price).toLocaleString()}đ</p>
                         </Link>
-                        <button className="p- bg-green-700 font-semibold text-white w-[90%] h-[40px] border rounded-lg flex items-center justify-center ">
-                            <p>Đặt mua</p>
-                        </button>
+                        <ModelF food={u} isOpen={isOpen} onClose={() => setIsOpen(false)} />
 
                     </div>
 

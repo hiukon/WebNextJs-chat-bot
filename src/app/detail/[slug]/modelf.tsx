@@ -3,7 +3,8 @@ import { Button, Modal } from 'antd';
 import { IFood } from '@/app/types/backend';
 import Image from 'next/image';
 import SweetIceSelector from './app.sugar';
-import { Scrollbar } from 'swiper/modules';
+
+import { useCartStore } from '../../bill/cartStore';
 
 
 const { useState } = React;;
@@ -55,12 +56,10 @@ const ModelF = ({ food, isOpen, onClose }: ModelBillProps) => {
         0
     );
     const selectedSizePrice = size[selectedSizeIndex].price;
-
-
-
     const basePrice = Number(food.price);
 
     const totalPrice = (basePrice + selectedSizePrice) * quantity + totalTopping;
+    const addItem = useCartStore((state) => state.addItem);
     return (
         <>
             <Button type="primary" onClick={showModal} className="p-1 bg-green-700 font-semibold text-white w-[90%] h-[40px] border rounded-lg flex items-center justify-center mb-3 ">
@@ -73,7 +72,7 @@ const ModelF = ({ food, isOpen, onClose }: ModelBillProps) => {
                 footer={null}
                 width={700}
             >
-                <div className="flex justify-center w-full p-6 mt-[50px]">
+                <div className="flex justify-center w-full p-6 ">
                     <div className="bg-gray-100 p-4 rounded-xl w-[400px] h-[400px] flex items-center justify-center shadow-sm">
                         <Image
                             src={food.image}
@@ -176,8 +175,7 @@ const ModelF = ({ food, isOpen, onClose }: ModelBillProps) => {
                                             .filter(t => t.count > 0),
                                         total: totalPrice,
                                     };
-                                    localStorage.setItem("cart", JSON.stringify(item));
-                                    window.location.href = "/bill";
+                                    addItem(item);
                                 }}
                                 className="bg-green-700 text-white px-6 py-2 rounded-xl shadow-md"
                             >

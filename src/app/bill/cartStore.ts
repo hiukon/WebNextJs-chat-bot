@@ -9,6 +9,8 @@ interface Topping {
 }
 
 interface CartItem {
+    userId: any;
+    productId: any;
     id: string | undefined;
     name: string;
     image: string;
@@ -32,9 +34,16 @@ export const useCartStore = create<CartState>()(
         (set) => ({
             items: [],
             addItem: (item) =>
-                set((state) => ({
-                    items: [...state.items, item], // thêm vào mảng
-                })),
+                set((state) => {
+                    // tạo id duy nhất dựa vào productId + size + toppings
+                    const uniqueId = `${item.productId}-${item.size}-${item.toppings.map(t => t.name).join('-')}`;
+
+                    const newItem = { ...item, id: uniqueId };
+
+                    return {
+                        items: [...state.items, newItem],
+                    };
+                }),
             removeItem: (id) =>
                 set((state) => ({
                     items: state.items.filter((i) => i.id !== id),
@@ -42,7 +51,9 @@ export const useCartStore = create<CartState>()(
             clearCart: () => set({ items: [] }),
         }),
         {
-            name: 'cart-storage', // lưu vào localStorage
+            name: 'cart-storage',
         }
+
     )
+
 );

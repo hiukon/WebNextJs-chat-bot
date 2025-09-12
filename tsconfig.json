@@ -35,7 +35,10 @@
     ".next/types/**/*.ts",
     "build/types/**/*.ts",
     "tailwind.config.js",
-    "postcss.config.js"
+    "postcss.config.js",
+    "backend/controllers/authMiddleware.js",
+    "backend/controllers/userController.js",
+    "src/app/api/routes/userRoutes.js"
   ],
   "exclude": [
     "node_modules"

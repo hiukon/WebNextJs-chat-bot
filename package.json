@@ -11,6 +11,9 @@
   "dependencies": {
     "@ant-design/icons": "^6.0.0",
     "antd": "^5.27.0",
+    "axios": "^1.11.0",
+    "bcrypt": "^6.0.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.0",
     "next": "13.5.6",
     "react": "18.2.0",
@@ -20,6 +23,7 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/node": "20.8.0",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",

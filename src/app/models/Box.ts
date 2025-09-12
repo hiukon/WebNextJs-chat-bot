@@ -18,7 +18,7 @@ const BoxSchema: Schema = new Schema({
     slug: { type: String, required: true, unique: true },
 });
 
-// fix lỗi "OverwriteModelError" khi hot reload
+
 const Box = models.Box || mongoose.model<IBox>("Box", BoxSchema);
 
 export default Box;
