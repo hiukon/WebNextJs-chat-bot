@@ -25,6 +25,7 @@ const Detail = ({ food }: { food: IFood }) => {
     const [toppingCounts, setToppingCounts] = useState(Array(toppings.length).fill(0));
     const [selectedSizeIndex, setSelectedSizeIndex] = useState(2);
 
+    const addItem = useCartStore((state) => state.addItem);
 
     const handleToppingChange = (index: number, delta: number) => {
         const updated = [...toppingCounts];
@@ -42,7 +43,34 @@ const Detail = ({ food }: { food: IFood }) => {
 
     const totalPrice = (basePrice + selectedSizePrice) * quantity + totalTopping;
 
-    const addItem = useCartStore((state) => state.addItem);
+    const handleAddToCart = () => {
+        const userStr = localStorage.getItem("user");
+        if (!userStr) {
+            alert("Bạn cần đăng nhập để thêm vào giỏ hàng");
+            return;
+        }
+
+        const currentUser = JSON.parse(userStr);
+
+        const item = {
+            userId: currentUser._id, // dùng _id từ localStorage
+            productId: food._id,
+            name: food.name,
+            image: food.image,
+            price: food.price,
+            quantity,
+            size: size[selectedSizeIndex].name,
+            sizePrice: size[selectedSizeIndex].price,
+            toppings: toppings
+                .map((t, i) => ({ ...t, count: toppingCounts[i] }))
+                .filter(t => t.count > 0),
+            total: totalPrice,
+        };
+
+        addItem(item);
+        alert("Đã thêm vào giỏ hàng");
+    };
+
     return (
         <div className="flex justify-center w-full p-6 mt-[50px]">
             <div className="bg-gray-100 p-4 rounded-xl w-[450px] h-[500px] flex items-center justify-center shadow-sm">
@@ -133,23 +161,7 @@ const Detail = ({ food }: { food: IFood }) => {
                 <div className="flex items-center justify-between mt-6">
 
                     <button
-                        onClick={() => {
-                            const item = {
-                                id: food._id,
-                                name: food.name,
-                                image: food.image,
-                                price: food.price,
-                                quantity,
-                                size: size[selectedSizeIndex].name,
-                                sizePrice: size[selectedSizeIndex].price,
-                                toppings: toppings
-                                    .map((t, i) => ({ ...t, count: toppingCounts[i] }))
-                                    .filter(t => t.count > 0),
-                                total: totalPrice,
-                            };
-                            addItem(item);
-
-                        }}
+                        onClick={handleAddToCart}
                         className="bg-green-700 text-white px-6 py-2 rounded-xl shadow-md"
                     >
                         🛒 Thêm vào giỏ hàng: {totalPrice.toLocaleString()} ₫

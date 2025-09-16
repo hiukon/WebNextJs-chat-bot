@@ -11,7 +11,7 @@ interface Topping {
 interface CartItem {
     userId: any;
     productId: any;
-    id: string | undefined;
+    id?: string | undefined;
     name: string;
     image: string;
     price: number;
@@ -29,25 +29,65 @@ interface CartState {
     clearCart: () => void;
 }
 
+
+interface User {
+    _id: string;
+    name: string;
+    email: string;
+    phone?: string;
+    address?: string;
+    role: string;
+}
+
+interface UserState {
+    currentUser: User | null;
+    setUser: (user: User | null) => void;
+}
+
+export const useUserStore = create<UserState>()(
+    persist(
+        (set) => ({
+            currentUser: null,
+            setUser: (user) => set({ currentUser: user }),
+        }),
+        { name: 'user-storage' }
+    )
+);
+
+
+
 export const useCartStore = create<CartState>()(
     persist(
         (set) => ({
             items: [],
             addItem: (item) =>
                 set((state) => {
-                    // tạo id duy nhất dựa vào productId + size + toppings
+                    // Tạo id duy nhất dựa vào productId + size + toppings
                     const uniqueId = `${item.productId}-${item.size}-${item.toppings.map(t => t.name).join('-')}`;
 
-                    const newItem = { ...item, id: uniqueId };
+                    // Kiểm tra xem item này đã có trong giỏ chưa
+                    const existing = state.items.find(i => i.id === uniqueId);
 
-                    return {
-                        items: [...state.items, newItem],
-                    };
+                    if (existing) {
+                        // Nếu đã có thì cộng dồn quantity và total
+                        return {
+                            items: state.items.map(i =>
+                                i.id === uniqueId
+                                    ? { ...i, quantity: i.quantity + item.quantity, total: i.total + item.total }
+                                    : i
+                            ),
+                        };
+                    }
+
+                    // Nếu chưa có thì thêm mới
+                    return { items: [...state.items, { ...item, id: uniqueId }] };
                 }),
+
             removeItem: (id) =>
                 set((state) => ({
                     items: state.items.filter((i) => i.id !== id),
                 })),
+
             clearCart: () => set({ items: [] }),
         }),
         {

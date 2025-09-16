@@ -8,20 +8,24 @@ const Checkout = () => {
     const [mode, setMode] = useState<'delivery' | 'pickup'>('delivery');
     const [agreed, setAgreed] = useState(false);
     const { items, removeItem } = useCartStore();
-
     const total = items.reduce((sum, item) => sum + item.total, 0);
-
     const handleCheckout = async () => {
-        if (items.length === 0) return;
+        const userStr = localStorage.getItem("user");
+        if (!userStr) {
+            alert("Bạn cần đăng nhập để đặt hàng.");
+            return;
+        }
+        const currentUser = JSON.parse(userStr);
+        console.log("Current User Parsed:", currentUser);
 
         const orderData = {
-            userId: items[0].userId, // giả sử userId giống nhau
+            userId: currentUser.userId,
             paymentMethod: payment,
             items: items.map(item => ({
                 productId: item.productId,
                 productName: item.name,
                 productImage: item.image,
-                quantity: item.quantity || 1,
+                quantity: item.quantity,
                 unitPrice: item.price,
                 totalPrice: item.total,
                 options: {
@@ -29,31 +33,33 @@ const Checkout = () => {
                     toppings: item.toppings.map(t => t.name),
                 },
             })),
-        };
 
+        };
+        console.log("Order Data:", orderData);
         try {
-            const res = await fetch('http://localhost:3000/api/orders', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+            const res = await fetch("http://localhost:3000/api/orders", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(orderData),
             });
 
             const data = await res.json();
             if (res.ok) {
-                alert('Đặt hàng thành công!');
-                localStorage.removeItem('cart');
+                alert("Đặt hàng thành công!");
+                localStorage.removeItem("cart");
             } else {
                 alert(`Lỗi: ${data.message}`);
             }
         } catch (error) {
-            console.error('Lỗi khi gửi đơn hàng:', error);
-            alert('Gửi đơn hàng thất bại!');
+            console.error("Lỗi khi gửi đơn hàng:", error);
+            alert("Gửi đơn hàng thất bại!");
         }
     };
 
+
     return (
         <div className="flex flex-col md:flex-row p-6 justify-center mt-8">
-            {/* --- LEFT PANEL: DELIVERY / PICKUP --- */}
+
             <div className="w-full md:w-1/3 h-[700px] pr-4 space-y-6 border border-black rounded-lg p-4 m-3">
                 <header className="flex items-center justify-between">
                     <button

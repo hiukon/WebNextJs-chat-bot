@@ -3,16 +3,15 @@ import Order from '../models/Order';
 import OrderItem from '../models/OrderItem';
 
 class OrderController {
+
     async createOrder(req: Request, res: Response) {
+
         try {
             const { userId, paymentMethod, items } = req.body;
-
             const totalPrice = items.reduce(
                 (sum: number, item: { totalPrice: number }) => sum + item.totalPrice,
                 0
             );
-
-
             const newOrder = await Order.create({
                 userId,
                 paymentMethod,
@@ -28,12 +27,12 @@ class OrderController {
 
             await OrderItem.insertMany(orderItems);
 
+
             res.status(201).json({ message: 'Đặt hàng thành công', orderId: newOrder._id });
         } catch (error: any) {
             console.error(' Lỗi tạo đơn hàng:', error.message || error);
             res.status(500).json({ message: 'Tạo đơn hàng thất bại', error: error.message });
         }
-
     }
 
     async getOrderDetails(req: Request, res: Response) {

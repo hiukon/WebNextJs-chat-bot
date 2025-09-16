@@ -60,6 +60,33 @@ const ModelF = ({ food, isOpen, onClose }: ModelBillProps) => {
 
     const totalPrice = (basePrice + selectedSizePrice) * quantity + totalTopping;
     const addItem = useCartStore((state) => state.addItem);
+    const handleAddToCart = () => {
+        const userStr = localStorage.getItem("user");
+        if (!userStr) {
+            alert("Bạn cần đăng nhập để thêm vào giỏ hàng");
+            return;
+        }
+
+        const currentUser = JSON.parse(userStr);
+
+        const item = {
+            userId: currentUser._id, // dùng _id từ localStorage
+            productId: food._id,
+            name: food.name,
+            image: food.image,
+            price: food.price,
+            quantity,
+            size: size[selectedSizeIndex].name,
+            sizePrice: size[selectedSizeIndex].price,
+            toppings: toppings
+                .map((t, i) => ({ ...t, count: toppingCounts[i] }))
+                .filter(t => t.count > 0),
+            total: totalPrice,
+        };
+
+        addItem(item);
+        alert("Đã thêm vào giỏ hàng");
+    };
     return (
         <>
             <Button type="primary" onClick={showModal} className="p-1 bg-green-700 font-semibold text-white w-[90%] h-[40px] border rounded-lg flex items-center justify-center mb-3 ">
@@ -161,22 +188,7 @@ const ModelF = ({ food, isOpen, onClose }: ModelBillProps) => {
                         <div className="flex items-center justify-between mt-6">
 
                             <button
-                                onClick={() => {
-                                    const item = {
-                                        id: food._id,
-                                        name: food.name,
-                                        image: food.image,
-                                        price: food.price,
-                                        quantity,
-                                        size: size[selectedSizeIndex].name,
-                                        sizePrice: size[selectedSizeIndex].price,
-                                        toppings: toppings
-                                            .map((t, i) => ({ ...t, count: toppingCounts[i] }))
-                                            .filter(t => t.count > 0),
-                                        total: totalPrice,
-                                    };
-                                    addItem(item);
-                                }}
+                                onClick={handleAddToCart}
                                 className="bg-green-700 text-white px-6 py-2 rounded-xl shadow-md"
                             >
                                 🛒 Thêm vào giỏ hàng: {totalPrice.toLocaleString()} ₫

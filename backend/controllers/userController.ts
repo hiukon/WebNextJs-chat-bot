@@ -99,14 +99,13 @@ export default class UserController {
 
             const hashedPassword = await bcrypt.hash(password, 10);
 
-            // Chỉ tạo admin, không cho phép set role từ body
             const user = new User({
                 name,
                 email,
                 password: hashedPassword,
                 phone,
                 address,
-                role: "admin", // fix cứng
+                role: "admin",
             });
 
             await user.save();
@@ -117,7 +116,7 @@ export default class UserController {
         }
     }
 
-    // READ
+
     async getUsers(req: Request, res: Response) {
         try {
             const users = await User.find().select("-password");
