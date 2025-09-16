@@ -63,35 +63,57 @@ class OrderController {
     async getAllOrders(req: Request, res: Response) {
         try {
             const orders = await Order.aggregate([
+                // Tạo field userIdObj: convert string sang ObjectId nếu cần
                 {
-                    $lookup: {
-                        from: 'users',
-                        localField: 'userId',
-                        foreignField: 'id',
-                        as: 'userInfo'
+                    $addFields: {
+                        userIdObj: {
+                            $cond: [
+                                { $eq: [{ $type: "$userId" }, "string"] },
+                                { $toObjectId: "$userId" },
+                                "$userId"
+                            ]
+                        }
                     }
                 },
-                { $unwind: '$userInfo' },
+                // Join với collection users
+                {
+                    $lookup: {
+                        from: "users",
+                        localField: "userIdObj",
+                        foreignField: "_id",
+                        as: "userInfo"
+                    }
+                },
+                // unwind userInfo, preserve null để không crash nếu user không tồn tại
+                {
+                    $unwind: {
+                        path: "$userInfo",
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                // Chọn field cần trả về
                 {
                     $project: {
-                        orderId: 1,
+                        orderId: "$_id",
                         _id: 0,
-                        userName: '$userInfo.name',
+                        userName: "$userInfo.name",
                         totalPrice: 1,
                         status: 1,
                         paymentMethod: 1,
                         createdAt: 1
                     }
                 },
+                // Sắp xếp theo thời gian mới nhất
                 { $sort: { createdAt: -1 } }
             ]);
 
             res.json(orders);
         } catch (error) {
-            console.error('Lỗi lấy danh sách đơn hàng:', error);
-            res.status(500).json({ message: 'Không lấy được danh sách đơn hàng' });
+            console.error("Lỗi lấy danh sách đơn hàng:", error);
+            res.status(500).json({ message: "Không lấy được danh sách đơn hàng" });
         }
     }
+
 
 }
 

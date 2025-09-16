@@ -16,7 +16,6 @@ const Checkout = () => {
             return;
         }
         const currentUser = JSON.parse(userStr);
-        console.log("Current User Parsed:", currentUser);
 
         const orderData = {
             userId: currentUser.userId,
@@ -35,7 +34,7 @@ const Checkout = () => {
             })),
 
         };
-        console.log("Order Data:", orderData);
+
         try {
             const res = await fetch("http://localhost:3000/api/orders", {
                 method: "POST",
