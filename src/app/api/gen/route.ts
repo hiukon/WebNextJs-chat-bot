@@ -16,8 +16,6 @@ export async function POST(request: Request) {
                 { status: 500 }
             );
         }
-
-        // kết nối DB
         await connectDB();
 
         // lấy menu trong DB

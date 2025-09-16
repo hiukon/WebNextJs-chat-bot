@@ -44,12 +44,12 @@ const MenuBoxes = () => {
                     }}
                 />
 
-                <div className="w-[77%] max-w-screen-2xl mx-5 mt-4 text-center">
+                <div className="w-[67%] max-w-screen-2xl mx-5 mt-4 text-center">
                     <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                         {currentBoxes.map((b) => (
                             <div
                                 key={b.name}
-                                className="flex flex-col items-center mx-auto text-center h-[300px] w-full max-w-[280px] border duration-300 hover:shadow-2xl rounded-lg"
+                                className="flex flex-col items-center mx-auto text-center h-[250px] w-full max-w-[200px] border duration-300 hover:shadow-2xl rounded-lg"
                             >
                                 <Link href={`/detailbox/${b.slug}`} className="relative rounded-lg bg-gray-100 w-full h-[70%] flex items-center justify-center">
                                     <div className="w-[128px] h-[128px]">

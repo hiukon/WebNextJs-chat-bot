@@ -98,8 +98,10 @@ const ModelF = ({ food, isOpen, onClose }: ModelBillProps) => {
                 onCancel={handleCancel}
                 footer={null}
                 width={700}
+
+                style={{ top: 5, }}
             >
-                <div className="flex justify-center w-full p-6 ">
+                <div className="flex justify-center w-full  ">
                     <div className="bg-gray-100 p-4 rounded-xl w-[400px] h-[400px] flex items-center justify-center shadow-sm">
                         <Image
                             src={food.image}
@@ -132,11 +134,12 @@ const ModelF = ({ food, isOpen, onClose }: ModelBillProps) => {
                         </div>
                         <div className="mt-4">
                             <p className="font-semibold">Chọn kích cỡ</p>
-                            <div className="flex items-center space-x-4 bg-white p-2 rounded-lg">
+                            <div className="flex items-center space-x-4 bg-white p-2 rounded-lg" >
                                 {size.map((s, idx) => (
                                     <button
                                         key={s.name}
                                         onClick={() => setSelectedSizeIndex(idx)}
+
                                         className={`w-[80px] h-[60px] border border-gray-300 rounded-lg overflow-hidden ${selectedSizeIndex === idx ? 'border-green-600 bg-green-700 text-white' : 'text-green-600'
                                             }`}
                                     >

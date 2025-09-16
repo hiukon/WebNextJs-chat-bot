@@ -19,18 +19,17 @@ export default function ProfilePage() {
     useEffect(() => {
         const localUser = getUser();
         if (localUser) {
-            setUser(localUser); // dùng ngay
-            return; // tránh fetch lại server nếu đã có user
+            setUser(localUser);
+            return;
         }
 
-        // 2. Lấy token để xác thực
+
         const token = getToken();
         if (!token) {
             router.push("/login");
             return;
         }
 
-        // 3. Fetch profile từ server (đảm bảo dữ liệu luôn mới)
         fetch("http://localhost:3000/api/users/profile", {
             headers: { Authorization: `Bearer ${token}` },
         })
@@ -40,7 +39,7 @@ export default function ProfilePage() {
             })
             .then((data) => setUser(data))
             .catch(() => {
-                removeToken(); // token không hợp lệ thì logout
+                removeToken();
                 router.push("/login");
             });
     }, [router]);

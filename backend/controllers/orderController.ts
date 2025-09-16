@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Order from '../models/Order';
 import OrderItem from '../models/OrderItem';
+import mongoose from 'mongoose';
 
 class OrderController {
 
@@ -38,32 +39,10 @@ class OrderController {
     async getOrderDetails(req: Request, res: Response) {
         try {
             const orderId = req.params.id;
-            const order = await Order.findById(orderId);
+            const _id = new mongoose.Types.ObjectId(orderId);
 
-            if (!order) {
-                res.status(404).json({ message: 'Không tìm thấy đơn hàng' });
-            } else {
-                const items = await OrderItem.find({ orderId });
-
-                res.status(200).json({
-                    id: order.id,
-                    userId: order.userId,
-                    totalPrice: order.totalPrice,
-                    status: order.status,
-                    paymentMethod: order.paymentMethod,
-                    createdAt: order.createdAt,
-                    items,
-                });
-            }
-        } catch (error) {
-            console.error('Lỗi lấy đơn hàng:', error);
-            res.status(500).json({ message: 'Không thể lấy đơn hàng' });
-        }
-    }
-    async getAllOrders(req: Request, res: Response) {
-        try {
-            const orders = await Order.aggregate([
-                // Tạo field userIdObj: convert string sang ObjectId nếu cần
+            const order = await Order.aggregate([
+                { $match: { _id } },
                 {
                     $addFields: {
                         userIdObj: {
@@ -75,7 +54,6 @@ class OrderController {
                         }
                     }
                 },
-                // Join với collection users
                 {
                     $lookup: {
                         from: "users",
@@ -84,26 +62,110 @@ class OrderController {
                         as: "userInfo"
                     }
                 },
-                // unwind userInfo, preserve null để không crash nếu user không tồn tại
+                { $unwind: { path: "$userInfo", preserveNullAndEmptyArrays: true } },
                 {
-                    $unwind: {
-                        path: "$userInfo",
-                        preserveNullAndEmptyArrays: true
+                    $lookup: {
+                        from: "orderitems",
+                        localField: "_id",
+                        foreignField: "orderId",
+                        as: "items"
                     }
                 },
-                // Chọn field cần trả về
                 {
                     $project: {
-                        orderId: "$_id",
+                        Id: "$_id",
                         _id: 0,
-                        userName: "$userInfo.name",
+                        user: {
+                            _id: "$userInfo._id",
+                            name: "$userInfo.name",
+                        },
                         totalPrice: 1,
                         status: 1,
                         paymentMethod: 1,
-                        createdAt: 1
+                        createdAt: 1,
+                        items: {
+                            $map: {
+                                input: "$items",
+                                as: "item",
+                                in: {
+                                    productId: "$$item.productId",
+                                    productName: "$$item.productName",
+                                    quantity: "$$item.quantity",
+                                    unitPrice: "$$item.unitPrice"
+                                    // bỏ productImage, orderId, _id, totalPrice nếu không muốn
+                                }
+                            }
+                        }
+                    }
+                }
+            ]);
+
+            if (!order || order.length === 0) {
+                res.status(404).json({ message: "Không tìm thấy đơn hàng" });
+            }
+
+            res.status(200).json(order[0]);
+        } catch (error) {
+            console.error("Lỗi lấy đơn hàng:", error);
+            res.status(500).json({ message: "Không thể lấy đơn hàng" });
+        }
+    }
+
+    async getAllOrders(req: Request, res: Response) {
+        try {
+            const orders = await Order.aggregate([
+                {
+                    $addFields: {
+                        userIdObj: {
+                            $cond: [
+                                { $eq: [{ $type: "$userId" }, "string"] },
+                                { $toObjectId: "$userId" },
+                                "$userId"
+                            ]
+                        }
                     }
                 },
-                // Sắp xếp theo thời gian mới nhất
+                {
+                    $lookup: {
+                        from: "users",
+                        localField: "userIdObj",
+                        foreignField: "_id",
+                        as: "userInfo"
+                    }
+                },
+                { $unwind: { path: "$userInfo", preserveNullAndEmptyArrays: true } },
+                {
+                    $lookup: {
+                        from: "orderitems",
+                        localField: "_id",
+                        foreignField: "orderId",
+                        as: "items"
+                    }
+                },
+                {
+                    $project: {
+                        Id: "$_id",
+                        _id: 0,
+                        user: {
+                            _id: "$userInfo._id",
+
+                        },
+                        totalPrice: 1,
+                        status: 1,
+                        paymentMethod: 1,
+                        createdAt: 1,
+                        items: {
+                            $map: {
+                                input: "$items",
+                                as: "item",
+                                in: {
+                                    productId: "$$item.productId",
+                                    quantity: "$$item.quantity"
+                                }
+                            }
+                        }
+                    }
+                },
                 { $sort: { createdAt: -1 } }
             ]);
 
@@ -113,8 +175,6 @@ class OrderController {
             res.status(500).json({ message: "Không lấy được danh sách đơn hàng" });
         }
     }
-
-
 }
 
 export default OrderController;

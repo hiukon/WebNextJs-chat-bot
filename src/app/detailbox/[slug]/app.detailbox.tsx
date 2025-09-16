@@ -24,6 +24,31 @@ const BoxDetail = ({ box }: Props) => {
 
     const totalPrice = (basePrice + selectedSizePrice) * quantity;
     const addItem = useCartStore((state) => state.addItem);
+    const handleAddToCart = () => {
+        const userStr = localStorage.getItem("user");
+        if (!userStr) {
+            alert("Bạn cần đăng nhập để thêm vào giỏ hàng");
+            return;
+        }
+
+        const currentUser = JSON.parse(userStr);
+
+        const item = {
+            userId: currentUser._id,
+            productId: box._id,
+            name: box.name,
+            image: box.image,
+            price: box.price,
+            quantity,
+            size: size[selectedSizeIndex].name,
+            sizePrice: size[selectedSizeIndex].price,
+            total: totalPrice,
+            toppings: [],
+        };
+
+        addItem(item);
+        alert("Đã thêm vào giỏ hàng");
+    };
 
     return (
         <div className="flex justify-center w-full p-6 mt-[50px]">
@@ -78,20 +103,7 @@ const BoxDetail = ({ box }: Props) => {
                 <div className="flex items-center justify-between mt-6">
 
                     <button
-                        onClick={() => {
-                            const item = {
-                                id: box._id,
-                                name: box.name,
-                                image: box.image,
-                                price: box.price,
-                                quantity,
-                                size: size[selectedSizeIndex].name,
-                                sizePrice: size[selectedSizeIndex].price,
-                                total: totalPrice,
-                                toppings: [],
-                            };
-                            addItem(item);
-                        }}
+                        onClick={handleAddToCart}
                         className="bg-green-700 text-white px-6 py-2 rounded-xl shadow-md"
                     >
                         🛒 Thêm vào giỏ hàng: {totalPrice.toLocaleString()} ₫

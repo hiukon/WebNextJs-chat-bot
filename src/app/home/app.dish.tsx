@@ -12,7 +12,7 @@ import ModelF from '../detail/[slug]/modelf';
 interface IProps {
     food: IFood[];
 }
-const Dish = ({ food }: IProps) => {
+const Dish = ({ food = [] }: IProps) => {
     const [visibleCount, setVisibleCount] = useState(5);
     const [visibleCount1, setVisibleCount1] = useState(5);
     const [isOpen, setIsOpen] = useState(false);

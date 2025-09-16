@@ -88,19 +88,40 @@ const Model = () => {
 
                     {/* Menu dropdown */}
                     {showMenu && isLoggedIn && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg z-50" onMouseLeave={() => setShowMenu(false)}>
+                        <div className="absolute  mt-2 w-60 bg-white shadow-lg rounded-lg z-50" onMouseLeave={() => setShowMenu(false)}>
                             <ul>
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => { router.push("/profile") }}>
-                                    Thông tin cá nhân
+                                <li className="flex px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => { router.push("/profile") }}>
+                                    <Image src="/profile/nguoi1.png"
+                                        alt="Người 1"
+                                        width={24}
+                                        height={24}
+                                        className="mr-2" /> Thông tin cá nhân
                                 </li>
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                    Cài đặt
+                                <li className="flex px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                    <Image src="/profile/help.png"
+                                        alt=""
+                                        width={24}
+                                        height={24}
+                                        className="mr-4" /> Hỗ trợ
                                 </li>
+                                {user.role === 'admin' && (
+                                    <li className="flex px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => { router.push("/profile") }}>
+                                        <Image src="/profile/help.png"
+                                            alt=""
+                                            width={24}
+                                            height={24}
+                                            className="mr-4" /> Trang admin
+                                    </li>)}
+
                                 <li
-                                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                    className="flex px-4 py-2 hover:bg-gray-100 cursor-pointer"
                                     onClick={handleLogout}
                                 >
-                                    Đăng xuất
+                                    <Image src="/profile/cut.png"
+                                        alt=""
+                                        width={24}
+                                        height={24}
+                                        className="mr-2" /> Đăng xuất
                                 </li>
                             </ul>
                         </div>

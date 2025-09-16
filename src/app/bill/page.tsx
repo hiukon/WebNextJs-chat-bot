@@ -131,7 +131,6 @@ const Checkout = () => {
                 )}
             </div>
 
-            {/* --- RIGHT PANEL: CART + PAYMENT --- */}
             <div className="w-full md:w-1/3 h-[700px] pr-4 space-y-6 border border-black rounded-lg p-4 m-3">
                 <h3 className="text-lg font-bold text-green-700 border-b-2 border-gray-300 mt-3">🛒 Giỏ hàng của bạn</h3>
                 <div className="flex items-center space-x-4">
@@ -204,9 +203,11 @@ const Checkout = () => {
                     </label>
 
                     <button
-                        disabled={!agreed}
+                        disabled={!agreed || items.length === 0}
                         onClick={handleCheckout}
-                        className={`mt-4 w-full py-2 rounded-lg font-bold shadow ${agreed ? 'bg-green-700 text-white' : 'bg-gray-300 text-white cursor-not-allowed'
+                        className={`mt-4 w-full py-2 rounded-lg font-bold shadow ${!agreed || items.length === 0
+                                ? 'bg-gray-300 text-white cursor-not-allowed'
+                                : 'bg-green-700 text-white'
                             }`}
                     >
                         Tiến hành thanh toán

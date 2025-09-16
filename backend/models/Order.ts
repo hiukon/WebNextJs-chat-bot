@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 const OrderSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+
     paymentMethod: {
         type: String,
         enum: ['cod', 'momo', 'bank', 'card', 'zalo', 'shopee'],

@@ -65,9 +65,9 @@ const AntdMenuBox = ({ boxes, onCategoryChange }: IProps) => {
                 openKeys={openKeys}
                 onOpenChange={setOpenKeys}
                 style={{
-                    width: 256,
+                    width: 200,
                     paddingBottom: 30,
-                    marginLeft: 300,
+                    marginLeft: 150,
                     marginTop: 80,
                     border: '1px solid rgb(235, 235, 235)',
                     borderRadius: 8,
