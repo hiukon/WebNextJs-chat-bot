@@ -192,7 +192,7 @@ const ModelF = ({ food, isOpen, onClose }: ModelBillProps) => {
 
                             <button
                                 onClick={handleAddToCart}
-                                className="bg-green-700 text-white px-6 py-2 rounded-xl shadow-md"
+                                className=" text-white px-6 py-2 rounded-xl shadow-md bg-green-600 hover:bg-green-800"
                             >
                                 🛒 Thêm vào giỏ hàng: {totalPrice.toLocaleString()} ₫
                             </button>

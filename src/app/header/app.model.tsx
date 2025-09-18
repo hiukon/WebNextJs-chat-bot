@@ -61,8 +61,6 @@ const Model = () => {
                         </p>
                     </div>
                 </Button>
-
-                {/* Icon user */}
                 <div>
                     <Button
                         variant="solid"

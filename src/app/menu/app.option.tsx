@@ -49,6 +49,7 @@ const AntdMenu = ({ foods, onCategoryChange }: IProps) => {
                     label: 'Phân loại',
                     children: categories,
                 },
+
             ],
         },
     ];
