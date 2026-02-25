@@ -23,7 +23,6 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ message: "No access token provided" });
   }
-
   const token = authHeader.split(" ")[1];
 
   try {

@@ -5,19 +5,16 @@ import { authMiddleware } from "../controllers/authMiddleware";
 const router = express.Router();
 const userController = new UserController();
 
-// CRUD
-router.post("/users/login/admin", userController.createUser.bind(userController));
-router.get("/users", userController.getUsers.bind(userController));
-router.put("/users/:id", userController.updateUser.bind(userController));
-router.delete("/users/:id", userController.deleteUser.bind(userController));
+router.post("/login/admin", userController.createUser.bind(userController));
+router.get("/", userController.getUsers.bind(userController));
+router.put("/:id", userController.updateUser.bind(userController));
+router.delete("/:id", userController.deleteUser.bind(userController));
 
+router.post("/register", userController.register.bind(userController));
+router.post("/login", userController.login.bind(userController));
 
-router.post("/users/register", userController.register.bind(userController));
-router.post("/users/login", userController.login.bind(userController));
-// Protected route example
-router.get("/users/profile", authMiddleware, userController.getProfile.bind(userController));
-router.put("/users/profile", authMiddleware, userController.updateProfile.bind(userController));
-
+router.get("/profile", authMiddleware, userController.getProfile.bind(userController));
+router.put("/profile", authMiddleware, userController.updateProfile.bind(userController));
 
 
 export default router;

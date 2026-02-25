@@ -1,27 +1,33 @@
-// backend/app.ts
-import express from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
-import foodRoutes from './routes/foodRoutes';
-import userRoutes from './routes/userRoutes';
-import boxRoutes from './routes/boxRoutes';
-import orderRoutes from './routes/orderRoutes';
+import express from "express";
+import cors from "cors";
+import foodRoutes from "./routes/foodRoutes";
+import userRoutes from "./routes/userRoutes";
+import boxRoutes from "./routes/boxRoutes";
+import orderRoutes from "./routes/orderRoutes";
+import connectDB from "./config/db";
 
 const app = express();
 const PORT = 3000;
 
 app.use(cors());
+
 app.use(express.json());
+connectDB();
+app.get("/", (req, res) => {
+    res.send("Backend OK");
+});
 
-mongoose.connect('mongodb://localhost:27017/fooddb')
-    .then(() => console.log('Kết nối MongoDB thành công!'))
-    .catch((err) => console.error('Kết nối MongoDB thất bại:', err));
 
-app.use('/api', foodRoutes);
-app.use('/api', userRoutes);
-app.use('/api', boxRoutes);
-app.use('/api/orders', orderRoutes);
+app.use("/api/foods", foodRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/boxes", boxRoutes);
+app.use("/api/orders", orderRoutes);
 
-app.listen(PORT, 'localhost', () => {
-    console.log(`Server đang chạy tại http://localhost:${PORT}`);
+app.use((err: any, req: any, res: any, next: any) => {
+    console.error(err);
+    res.status(500).json({ message: "Lỗi server" });
+});
+
+app.listen(PORT, () => {
+    console.log(`Server chạy tại http://localhost:${PORT}`);
 });
